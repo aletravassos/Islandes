@@ -601,7 +601,7 @@ function loadTheme(t) {
 function render() {
   const c = cards[idx];
   document.getElementById('cWord').textContent = c.w;
-  document.getElementById('forvoBtn').href = 'https://forvo.com/word/' + c.w.toLowerCase().replace(/\s+/g,'_') + '/#is';
+  document.getElementById('forvoBtn').href = 'https://forvo.com/word/' + encodeURIComponent(c.w.toLowerCase().replace(/\s+/g,'_')) + '/#is';
   document.getElementById('cPron').textContent = c.p;
   document.getElementById('cPt').textContent = c.pt;
   document.getElementById('cEx').textContent = c.ex;
