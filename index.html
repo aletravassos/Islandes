@@ -76,6 +76,9 @@ section.active{display:block}
 .card-word{font-size:28px;font-weight:600;margin-bottom:8px;letter-spacing:-0.5px}
 .card-pron{font-size:14px;color:var(--muted)}
 .card-hint{font-size:12px;color:var(--muted);margin-top:20px}
+.card-word-row{display:flex;align-items:center;justify-content:center;gap:10px}
+.forvo-btn{background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:2px 4px;border-radius:4px;transition:opacity .15s;flex-shrink:0}
+.forvo-btn:hover{opacity:.65}
 .card-pt{font-size:22px;font-weight:600;margin-bottom:12px}
 .card-ex{font-size:13.5px;color:var(--muted);font-style:italic}
 .card-ctr{font-size:12px;color:var(--muted);margin-top:14px}
@@ -195,7 +198,10 @@ textarea:focus{border-color:var(--accent)}
   <div class="card-area">
     <div class="flashcard" id="fc" onclick="flip()">
       <div class="card-front">
-        <div class="card-word" id="cWord"></div>
+        <div class="card-word-row">
+          <div class="card-word" id="cWord"></div>
+          <a id="forvoBtn" class="forvo-btn" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Ouvir pronúncia no Forvo">🔊</a>
+        </div>
         <div class="card-pron" id="cPron"></div>
         <div class="card-hint">Clique para ver a tradução</div>
       </div>
@@ -595,6 +601,7 @@ function loadTheme(t) {
 function render() {
   const c = cards[idx];
   document.getElementById('cWord').textContent = c.w;
+  document.getElementById('forvoBtn').href = 'https://forvo.com/word/' + c.w.toLowerCase().replace(/\s+/g,'_') + '/#is';
   document.getElementById('cPron').textContent = c.p;
   document.getElementById('cPt').textContent = c.pt;
   document.getElementById('cEx').textContent = c.ex;
