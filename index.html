@@ -77,8 +77,8 @@ section.active{display:block}
 .card-pron{font-size:14px;color:var(--muted)}
 .card-hint{font-size:12px;color:var(--muted);margin-top:20px}
 .card-word-row{display:flex;align-items:center;justify-content:center;gap:10px}
-.forvo-btn{background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:2px 4px;border-radius:4px;transition:opacity .15s;flex-shrink:0}
-.forvo-btn:hover{opacity:.65}
+.speak-btn{background:none;border:none;cursor:pointer;font-size:18px;line-height:1;padding:2px 4px;border-radius:4px;transition:opacity .15s;flex-shrink:0}
+.speak-btn:hover{opacity:.65}
 .card-pt{font-size:22px;font-weight:600;margin-bottom:12px}
 .card-ex{font-size:13.5px;color:var(--muted);font-style:italic}
 .card-ctr{font-size:12px;color:var(--muted);margin-top:14px}
@@ -200,7 +200,7 @@ textarea:focus{border-color:var(--accent)}
       <div class="card-front">
         <div class="card-word-row">
           <div class="card-word" id="cWord"></div>
-          <a id="forvoBtn" class="forvo-btn" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Ouvir pronúncia no Forvo">🔊</a>
+          <button class="speak-btn" onclick="speak(event)" title="Ouvir pronúncia">🔊</button>
         </div>
         <div class="card-pron" id="cPron"></div>
         <div class="card-hint">Clique para ver a tradução</div>
@@ -601,7 +601,6 @@ function loadTheme(t) {
 function render() {
   const c = cards[idx];
   document.getElementById('cWord').textContent = c.w;
-  document.getElementById('forvoBtn').href = 'https://forvo.com/word/' + encodeURIComponent(c.w.toLowerCase().replace(/\s+/g,'_')) + '/#is';
   document.getElementById('cPron').textContent = c.p;
   document.getElementById('cPt').textContent = c.pt;
   document.getElementById('cEx').textContent = c.ex;
@@ -797,6 +796,23 @@ function addMsg(role, text, typing=false) {
 }
 
 function delMsg(id) { const e=document.getElementById(id); if(e) e.remove(); }
+
+// ─── PRONÚNCIA ───────────────────────────────────────────────────
+
+function speak(e) {
+  e.stopPropagation();
+  if (!window.speechSynthesis) return;
+  const word = cards[idx].w;
+  const utt = new SpeechSynthesisUtterance(word);
+  utt.rate = 0.8;
+  const voices = window.speechSynthesis.getVoices();
+  const is = voices.find(v => v.lang === 'is-IS' || v.lang === 'is');
+  const en = voices.find(v => v.lang.startsWith('en-GB'));
+  utt.voice = is || en || null;
+  utt.lang = utt.voice ? utt.voice.lang : 'is-IS';
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utt);
+}
 
 // ─── INIT ────────────────────────────────────────────────────────
 
